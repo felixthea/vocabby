@@ -3,15 +3,28 @@ $(document).ready(function(){
 	var currentWord = "";
 	var key;
 	var word;
+	var syn;
 
 	$(document).keydown(function(event){
 		key = event.keyCode
 		if(key == 32){
-			console.log("'" + currentWord.trim() + "'");
+			// console.log("'" + currentWord.trim() + "'");
+			syn = checkVocab(currentWord.trim())
+			if (syn !== 'undefined'){
+				console.log("here's a synonym: " + syn)
+			};
 			currentWord = "";
 		}
 		currentWord += String.fromCharCode(key)
 	})
+
+	function checkVocab(word) {
+		if (word == "BRAVE") {
+			return "courageous";
+		} else {
+			return 'undefined';
+		}
+	}
 
 	// console.log($(event.target).text());	
 
