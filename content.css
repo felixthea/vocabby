@@ -8,6 +8,7 @@ div#vocab{
  	left:0;
 	background: red;
 	border: 1px solid black;
+	display: none;
 }
 
 .hidden{
