@@ -13,34 +13,43 @@ $(document).ready(function(){
 	}
 
 	function createNoticeModal() {
-		$('body').prepend("<div id='vocab'></div>");
-		$('body').css('z-index', 1000);
+		$('body').prepend("<div id='vocab' class='hidden'></div>");
 	}
 
 	function showVocabWord(word){
+		console.log("I'm in showVocabWord");
+		$('div#vocab').html('');
 		$('div#vocab').html(word);
+		$('div#vocab').removeClass('hidden');
+		window.setTimeout(function() {
+      		$('div#vocab').addClass('hidden');
+    	}, 3000)
 	}
 
 	$(document).keydown(function(event){
 		key = event.keyCode
+		letter = String.fromCharCode(key)
+
 		if(key == 32){ //space
 			console.log(currentWord.trim());
 
 			syn = checkVocab(currentWord.trim())
-			if (syn !== 'undefined'){
-				console.log("here's a synonym: " + syn);
+			console.log(syn)
+			if (syn !== undefined){
 				showVocabWord(syn);
 			}
 			currentWord = "";
 		} else if(key == 8){ //delete, backspace
 			currentWord = currentWord.substr(0,currentWord.length-1)
 		} else {
-			currentWord += String.fromCharCode(key)
+			currentWord += letter
 		}
 	})
 
 	function checkVocab(word) {
-		return synList[word];
+		if (word in synList) {
+			return synList[word];
+		}
 	}
 
 	createNoticeModal();

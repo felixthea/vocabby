@@ -1,4 +1,15 @@
 div#vocab{
+	z-index: 1000;
+	float: left;
+  	position: fixed;
+  	margin: 20px;
+  	padding: 5px;
+ 	top:0;
+ 	left:0;
 	background: red;
 	border: 1px solid black;
+}
+
+.hidden{
+	display:none;
 }
