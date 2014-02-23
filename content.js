@@ -22,11 +22,11 @@ $(document).ready(function(){
 		$('body').prepend("<div id='vocab'></div>");
 	}
 
-	function showVocabWord(word){
+	function showVocabWord(originalWord, toLearn){
 		$v = $('div#vocab')
 		$v.empty();
 		$v.fadeIn();
-		$v.html(word);
+		$v.html(originalWord + " -> " + toLearn);
 		// $v.removeClass('hidden');
 		window.setTimeout(function() {
       		$v.fadeOut();
@@ -34,7 +34,6 @@ $(document).ready(function(){
 	}
 
 	$(document).keypress(function(event){
-		console.log(event);
 		charCode = event.charCode;
 		letter = String.fromCharCode(charCode);
 
@@ -43,7 +42,7 @@ $(document).ready(function(){
 
 			syn = getSyn(currentWord.toLowerCase())
 
-			if (syn !== undefined) { showVocabWord(syn); }
+			if (syn !== undefined) { showVocabWord(currentWord, syn); }
 
 			currentWord = "";
 		} else {
