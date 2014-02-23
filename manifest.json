@@ -16,7 +16,7 @@
 
 	"content_scripts": [
 		{
-			"matches": ["<all_urls>"],
+			"matches": ["https://*.google*"],
 			"css": ["content.css"],
 			"js": ["jquery.min.js", "content.js"]
 		}
