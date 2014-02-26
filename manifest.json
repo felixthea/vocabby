@@ -6,7 +6,8 @@
 	"version": "1.0",
 
 	"permissions": [
-		"http://secure.flickr.com/"
+		"http://secure.flickr.com/",
+		"http://words.bighugelabs.com/*"
 	],
 
 	"browser_action": {

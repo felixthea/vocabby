@@ -79,12 +79,16 @@ var kittenGenerator = {
 
 // Run our kitten generation script as soon as the document's DOM is ready.
 // document.addEventListener('DOMContentLoaded', function () {
-//   kittenGenerator.requestKittens();
+  // kittenGenerator.requestKittens();
 // });
 
-$(document).ready(function(){
-  console.log("im in here!")
-  chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
-    console.log(tabs[0]);
-  })
-})
+function requestSyns() {
+  var req = new XMLHttpRequest();
+  req.open("GET", "http://words.bighugelabs.com/api/2/7b6ad11fccc077c6e8794f11597d63e9/brave/json", true);
+  req.onload = function(data){
+    console.log(JSON.parse(data.target.responseText));
+  };
+  req.send(null);
+}
+
+requestSyns();

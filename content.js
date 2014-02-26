@@ -5,11 +5,12 @@ $(document).ready(function(){
 	var word;
 	var syn;
 	var synList = {
-		"comedic": "humorous1",
-		"funny": "humorous2",
-		"laugh": "humorous3",
-		"amusing": "humorous4",
-		"zany": "humorous5"
+		"appease": "slake",
+		"quench": "slake",
+		"tease": "razz",
+		"heckle": "razz",
+		"adorable": "toothsome",
+		"delightful": "toothsome"
 	}
 
 	var endCharCodes = [' ', '.', '?', '!'].map(function(character) { 
@@ -63,4 +64,7 @@ $(document).ready(function(){
 	}
 
 	createNoticeModal();
+	$.get('http://words.bighugelabs.com/api/2/7b6ad11fccc077c6e8794f11597d63e9/word/json', function(data){
+		console.log(data);
+	})
 })
