@@ -1,13 +1,14 @@
 {
 	"manifest_version": 2,
 
-	"name": "One-click Kittens",
-	"description": "This extension demonstrates a browser action with kittens.",
-	"version": "1.0",
+	"name": "Vocabby",
+	"description": "A twist on learning new words.",
+	"version": "0.1",
 
 	"permissions": [
 		"http://secure.flickr.com/",
-		"http://words.bighugelabs.com/*"
+		"http://words.bighugelabs.com/*",
+		"http://shielded-shore-5923.herokuapp.com/*"
 	],
 
 	"browser_action": {

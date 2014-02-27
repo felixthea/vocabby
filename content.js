@@ -64,7 +64,4 @@ $(document).ready(function(){
 	}
 
 	createNoticeModal();
-	$.get('http://words.bighugelabs.com/api/2/7b6ad11fccc077c6e8794f11597d63e9/word/json', function(data){
-		console.log(data);
-	})
 })

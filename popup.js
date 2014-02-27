@@ -77,18 +77,40 @@ var kittenGenerator = {
   }
 };
 
+document.addEventListener('DOMContentLoaded', function () {
+  $.get('http://shielded-shore-5923.herokuapp.com/logged_in_check', function(data){
+    if (data == 'true') {
+      console.log('logged in')
+      $('form#log-in').addClass('hidden');
+    } else {
+      console.log('logged out')
+      $('form#log-in').on('click', '#submit', function(event){
+        event.preventDefault();
+        user_email = $('#user_email').val();
+        user_password = $('#user_password').val();
+
+        $.post('http://shielded-shore-5923.herokuapp.com/session', {email: user_email, password: user_password}, function(data, textStatus, jqXHR){
+          console.log(data);
+          console.log(textStatus);
+          console.log(jqXHR);
+        })
+      })
+    }
+  })
+})
+
 // Run our kitten generation script as soon as the document's DOM is ready.
 // document.addEventListener('DOMContentLoaded', function () {
   // kittenGenerator.requestKittens();
 // });
 
-function requestSyns() {
-  var req = new XMLHttpRequest();
-  req.open("GET", "http://words.bighugelabs.com/api/2/7b6ad11fccc077c6e8794f11597d63e9/brave/json", true);
-  req.onload = function(data){
-    console.log(JSON.parse(data.target.responseText));
-  };
-  req.send(null);
-}
+// function requestSyns() {
+//   var req = new XMLHttpRequest();
+//   req.open("GET", "http://words.bighugelabs.com/api/2/7b6ad11fccc077c6e8794f11597d63e9/brave/json", true);
+//   req.onload = function(data){
+//     console.log(JSON.parse(data.target.responseText));
+//   };
+//   req.send(null);
+// }
 
-requestSyns();
+// requestSyns();
