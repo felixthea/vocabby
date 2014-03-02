@@ -77,27 +77,85 @@ var kittenGenerator = {
   }
 };
 
-document.addEventListener('DOMContentLoaded', function () {
-  $.get('http://shielded-shore-5923.herokuapp.com/logged_in_check', function(data){
-    if (data == 'true') {
-      console.log('logged in')
-      $('form#log-in').addClass('hidden');
-    } else {
-      console.log('logged out')
-      $('form#log-in').on('click', '#submit', function(event){
-        event.preventDefault();
-        user_email = $('#user_email').val();
-        user_password = $('#user_password').val();
+function createCORSRequest(method, url) {
+  var xhr = new XMLHttpRequest();
+  if ("withCredentials" in xhr) {
 
-        $.post('http://shielded-shore-5923.herokuapp.com/session', {email: user_email, password: user_password}, function(data, textStatus, jqXHR){
-          console.log(data);
-          console.log(textStatus);
-          console.log(jqXHR);
-        })
-      })
-    }
+    // Check if the XMLHttpRequest object has a "withCredentials" property.
+    // "withCredentials" only exists on XMLHTTPRequest2 objects.
+    xhr.open(method, url, true);
+
+  } else if (typeof XDomainRequest != "undefined") {
+
+    // Otherwise, check if XDomainRequest.
+    // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
+    xhr = new XDomainRequest();
+    xhr.open(method, url);
+
+  } else {
+
+    // Otherwise, CORS is not supported by the browser.
+    xhr = null;
+
+  }
+  return xhr;
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  var storedSessionToken = window.localStorage.getItem('sessionToken')
+
+  if (storedSessionToken !== 'null') { 
+    hideLogInForm();
+    logInUsingSessionToken(storedSessionToken);
+  }
+
+  $('form#log-in').on('click', '#submit', function(event){
+    var form = $('form#log-in')
+    event.preventDefault();
+    user_email = $('#user_email').val();
+    user_password = $('#user_password').val();
+    formData = form.serializeJSON();
+
+    $.ajax({
+      type: "POST",
+      url: "http://localhost:3000/session",
+      data: formData,
+      success: function(data,status,jqXHR){
+        saveSessionToken(data["session_token"])
+      },
+      error: function(jqXHR,textStatus,errorThrown){
+        console.log(jqXHR)
+        console.log(textStatus)
+        console.log(errorThrown)
+      }
+    })
   })
+
+  function saveSessionToken(sessionToken){
+    window.localStorage.setItem('sessionToken', sessionToken)
+  }
+
+  function hideLogInForm(){
+    $('form#log-in').addClass('hidden');
+  }
+
+  function logInUsingSessionToken(sessionToken) {
+    $.ajax({
+      type: "POST",
+      url: "http://localhost:3000/find_current_user",
+      data: {"session_token": storedSessionToken},
+      success: function(data,status,jqXHR){
+        console.log(data);
+        $('#welcome').html("Hi " + data["email"])
+      },
+      error: function(jqXHR,textStatus,errorThrown){
+        console.log('error finding user using session token');
+      }
+    })
+  }
 })
+
+// http://shielded-shore-5923.herokuapp.com/session
 
 // Run our kitten generation script as soon as the document's DOM is ready.
 // document.addEventListener('DOMContentLoaded', function () {
