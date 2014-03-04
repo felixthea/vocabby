@@ -1,14 +1,3 @@
-// Copyright (c) 2012 The Chromium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
-/**
- * Global variable containing the query we'd like to pass to Flickr. In this
- * case, kittens!
- *
- * @type {string}
- */
-var QUERY = 'puppies';
 var API_BASE = "http://localhost:3000"
 // var HOST = "http://shielded-shore-5923.herokuapp.com"
 
@@ -53,6 +42,10 @@ document.addEventListener('DOMContentLoaded', function () {
       data: {"word": {"name": word_name, "session_token": storedSessionToken}},
       success: function(data,status,jqXHR){
         console.log(data)
+        // $('#word_name').val("");
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
+
+        })
       },
       error: function(jqXHR,textStatus,errorThrown){
         console.log(jqXHR);
@@ -61,6 +54,24 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     })
   })
+
+  function fetchWordsAndSyns() {
+    $.ajax({
+      type: "GET",
+      url: API_BASE + "/words",
+      data: {"session_token": storedSessionToken},
+      success: function(data,status,jqXHR){
+        console.log(data)
+        // window.localStorage.setItem("vocab", data);
+        chrome.storage.local.set({"vocabList": data});
+      },
+      error: function(jqXHR,textStatus,errorThrown){
+        console.log(jqXHR);
+        console.log(textStatus);
+        console.log(errorThrown);
+      } 
+    })
+  }
 
   function saveSessionToken(sessionToken){
     window.localStorage.setItem('sessionToken', sessionToken)
@@ -80,9 +91,9 @@ document.addEventListener('DOMContentLoaded', function () {
       url: API_BASE + "/find_current_user",
       data: {"session_token": storedSessionToken},
       success: function(data,status,jqXHR){
-        console.log(data);
         userInfo = data
         $('#welcome').html("Hi " + data["email"])
+        fetchWordsAndSyns();
       },
       error: function(jqXHR,textStatus,errorThrown){
         console.log('error finding user using session token');

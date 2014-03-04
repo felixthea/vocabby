@@ -1,17 +1,10 @@
 $(document).ready(function(){
-	console.log("in the content.js file");
 	var currentWord = "";
 	var key;
 	var word;
 	var syn;
-	var synList = {
-		"appease": "slake",
-		"quench": "slake",
-		"tease": "razz",
-		"heckle": "razz",
-		"adorable": "toothsome",
-		"delightful": "toothsome"
-	}
+	var synList;
+	// JSON.parse(window.localStorage.getItem('vocab'));
 
 	var endCharCodes = [' ', '.', '?', '!'].map(function(character) { 
 		return character.charCodeAt(); 
@@ -64,4 +57,8 @@ $(document).ready(function(){
 	}
 
 	createNoticeModal();
+	chrome.storage.local.get("vocabList", function(results){
+		synList = results.vocabList;
+		console.log(results.vocabList);
+	});
 })

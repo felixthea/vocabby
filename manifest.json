@@ -6,14 +6,18 @@
 	"version": "0.1",
 
 	"permissions": [
-		"http://secure.flickr.com/",
-		"http://words.bighugelabs.com/*",
-		"http://shielded-shore-5923.herokuapp.com/*"
+		"http://shielded-shore-5923.herokuapp.com/*",
+		"background",
+		"storage"
 	],
 
 	"browser_action": {
 		"default_icon": "icon.png",
 		"default_popup": "popup.html"
+	},
+
+	"background": {
+		"scripts": ["background.js"]
 	},
 
 	"content_scripts": [

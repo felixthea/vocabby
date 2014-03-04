@@ -30,6 +30,8 @@
     <script type="text/javascript" src="jquery.min.js"></script>
     <script type="text/javascript" src="jquery.serializeJSON.min.js"></script>
     <script src="popup.js"></script>
+  </head>
+  <body>
     <span id="welcome"></span>
     <form id="log-in">
       <label for="user_email">Email:</label>
@@ -45,8 +47,7 @@
       <input type="string" id="word_name" name="word[name]">
       <input type="submit" id='submit' value='Add'>
     </form>
-  </head>
-  <body>
+    <script type="application/json" id="words-json"></script>
   </body>
 </html>
 
