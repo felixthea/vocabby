@@ -1,5 +1,5 @@
 var API_BASE = "http://localhost:3000"
-// var HOST = "http://shielded-shore-5923.herokuapp.com"
+// var API_BASE = "http://shielded-shore-5923.herokuapp.com"
 
 document.addEventListener('DOMContentLoaded', function () {
   var userInfo;
@@ -41,11 +41,8 @@ document.addEventListener('DOMContentLoaded', function () {
       url: API_BASE + "/words",
       data: {"word": {"name": word_name, "session_token": storedSessionToken}},
       success: function(data,status,jqXHR){
-        console.log(data)
-        // $('#word_name').val("");
-        chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
-
-        })
+        $('#word_name').val("");
+        fetchWordsAndSyns();
       },
       error: function(jqXHR,textStatus,errorThrown){
         console.log(jqXHR);
@@ -62,8 +59,12 @@ document.addEventListener('DOMContentLoaded', function () {
       data: {"session_token": storedSessionToken},
       success: function(data,status,jqXHR){
         console.log(data)
-        // window.localStorage.setItem("vocab", data);
         chrome.storage.local.set({"vocabList": data});
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
+          chrome.tabs.sendMessage(tabs[0].id, {updatedVocab: "true"}, function(response){
+            console.log(response);
+          })
+        })
       },
       error: function(jqXHR,textStatus,errorThrown){
         console.log(jqXHR);
@@ -101,15 +102,3 @@ document.addEventListener('DOMContentLoaded', function () {
     })
   }
 })
-
-
-// function requestSyns() {
-//   var req = new XMLHttpRequest();
-//   req.open("GET", "http://words.bighugelabs.com/api/2/7b6ad11fccc077c6e8794f11597d63e9/brave/json", true);
-//   req.onload = function(data){
-//     console.log(JSON.parse(data.target.responseText));
-//   };
-//   req.send(null);
-// }
-
-// requestSyns();

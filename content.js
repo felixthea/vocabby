@@ -31,8 +31,7 @@ $(document).ready(function(){
 		charCode = event.charCode;
 		letter = String.fromCharCode(charCode);
 
-		if($.inArray(charCode, endCharCodes) > -1){ 
-			console.log(currentWord);
+		if($.inArray(charCode, endCharCodes) > -1){
 
 			syn = getSyn(currentWord.toLowerCase())
 
@@ -56,9 +55,21 @@ $(document).ready(function(){
 		}
 	}
 
+	function updateVocabList() {
+		chrome.storage.local.get("vocabList", function(results){
+			synList = results.vocabList;
+			console.log(results.vocabList);
+		});
+	};
+
+	chrome.runtime.onMessage.addListener(
+		function(request, sender, sendResponse) {
+			if( request.updatedVocab == "true") {
+				updateVocabList();
+			}
+		}
+	);
+
 	createNoticeModal();
-	chrome.storage.local.get("vocabList", function(results){
-		synList = results.vocabList;
-		console.log(results.vocabList);
-	});
+	updateVocabList();
 })
