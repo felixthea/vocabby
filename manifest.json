@@ -7,7 +7,6 @@
 
 	"permissions": [
 		"http://shielded-shore-5923.herokuapp.com/*",
-		"background",
 		"storage"
 	],
 

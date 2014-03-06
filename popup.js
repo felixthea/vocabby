@@ -1,33 +1,59 @@
-var API_BASE = "http://localhost:3000"
-// var API_BASE = "http://shielded-shore-5923.herokuapp.com"
+// var API_BASE = "http://localhost:3000"
+var API_BASE = "http://shielded-shore-5923.herokuapp.com"
 
 document.addEventListener('DOMContentLoaded', function () {
   var userInfo;
-  var storedSessionToken = window.localStorage.getItem('sessionToken')
+  var storedSessionToken = window.localStorage.getItem('vocabbySessionToken');
+  var $logInForm = $('form#log-in');
+  var $addWordsForm = $('form#add-words');
 
-  if (storedSessionToken !== 'null') { 
+  if (storedSessionToken !== null) { 
     logInUsingSessionToken(storedSessionToken);
-    hideLogInForm();
-    showAddWordsForm();
+    $logInForm.addClass('hidden');
+  } else {
+    $addWordsForm.addClass('hidden');
+
+    $('form#log-in').on('click', '#submit', function(event){
+      var form = $('form#log-in');
+
+      event.preventDefault();
+
+      formData = form.serializeJSON();
+      $.ajax({
+        type: "POST",
+        url: API_BASE + "/session",
+        data: formData,
+        success: function(data,status,jqXHR){
+          saveSessionToken(data["session_token"])
+          $logInForm.addClass('hidden');
+          $addWordsForm.removeClass('hidden');
+          $('#welcome').html("Hi " + data["email"])
+          $('button#log-out').removeClass('hidden');
+        },
+        error: function(jqXHR,textStatus,errorThrown){
+          console.log(jqXHR)
+          console.log(textStatus)
+          console.log(errorThrown)
+        }
+      })
+    })
   }
 
-  $('form#log-in').on('click', '#submit', function(event){
-    var form = $('form#log-in');
-
+  $('button#log-out').on('click', function(event){
     event.preventDefault();
-
-    formData = form.serializeJSON();
     $.ajax({
-      type: "POST",
+      type: "DELETE",
       url: API_BASE + "/session",
-      data: formData,
       success: function(data,status,jqXHR){
-        saveSessionToken(data["session_token"])
+        console.log("logged out");
+        window.localStorage.removeItem('vocabbySessionToken');
+        $('#welcome').html("");
+        $logInForm.removeClass('hidden');
+        $addWordsForm.addClass('hidden');
+        $('button#log-out').addClass('hidden');
       },
-      error: function(jqXHR,textStatus,errorThrown){
-        console.log(jqXHR)
-        console.log(textStatus)
-        console.log(errorThrown)
+      error: function(jqXHR, textStatus, errorThrown){
+        console.log("error in logging out");
       }
     })
   })
@@ -75,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function saveSessionToken(sessionToken){
-    window.localStorage.setItem('sessionToken', sessionToken)
+    window.localStorage.setItem('vocabbySessionToken', sessionToken)
   }
 
   function hideLogInForm(){
